@@ -52,6 +52,8 @@ require('packer').startup(
 		use 'hrsh7th/cmp-path'
 
 		use 'onsails/lspkind.nvim'
+
+		use 'jose-elias-alvarez/null-ls.nvim'
 	end)
 
 
@@ -64,3 +66,4 @@ require('markrikhter.plugins.nvim-tree')
 require('markrikhter.plugins.symbols-outline')
 require('markrikhter.plugins.comment')
 require('markrikhter.plugins.cmp')
+require('markrikhter.plugins.null-ls')
