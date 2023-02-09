@@ -1,11 +1,13 @@
+local utils = require("markrikhter.utilities")
+
 require("symbols-outline").setup({
 	highlight_hovered_item = false,
 	auto_unfold_hover = false,
-	autofold_depth = 2,
+	autofold_depth = 1,
 	keymaps = {
-		fold_all = 'H',
-		unfold_all = 'L',
+		fold_all = "H",
+		unfold_all = "L",
 	},
 })
 
-vim.keymap.set('n', '<F2>', '<CMD>:SymbolsOutline<CR>', {silent = true, noremap = true })
+utils.map("n", "<F2>", "<CMD>:SymbolsOutline<CR>")

@@ -1,3 +1,5 @@
+local utils = require("markrikhter.utilities")
+
 require("nvim-tree").setup({
 	disable_netrw = true,
 	open_on_setup = true,
@@ -7,33 +9,33 @@ require("nvim-tree").setup({
 		enable = true,
 	},
 	view = {
-		side = 'left',
+		side = "left",
 		hide_root_folder = true,
 		mappings = {
 			list = {
 				{
-					key = '<C-K>',
-					action = '',
+					key = "<C-K>",
+					action = "",
 				},
 				{
-					key = 'h',
-					action = 'close_node',
+					key = "h",
+					action = "close_node",
 				},
 				{
-					key = 'l',
-					action = 'edit',
+					key = "l",
+					action = "edit",
 				},
 			},
 		},
 	},
 	renderer = {
-        indent_markers = {
-            enable = true,
-        },
-    },
+		indent_markers = {
+			enable = true,
+		},
+	},
 })
 
-vim.keymap.set('n', '<F1>', '<CMD>lua require("nvim-tree").toggle()<CR>')
+utils.map("n", "<F1>", '<CMD>lua require("nvim-tree").toggle()<CR>')
 
 local M = {}
 

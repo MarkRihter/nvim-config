@@ -1,10 +1,10 @@
 require("packer").startup(function(use)
+	-- Package manager
 	use("wbthomason/packer.nvim")
 
-	use("RRethy/nvim-base16")
-
+	-- Looks
+	use("ful1e5/onedark.nvim")
 	use("kyazdani42/nvim-web-devicons")
-
 	use({
 		"nvim-lualine/lualine.nvim",
 		event = "BufEnter",
@@ -13,11 +13,11 @@ require("packer").startup(function(use)
 		end,
 	})
 
-	use({
-		"nvim-treesitter/nvim-treesitter",
-		run = ":TSUpdate",
-	})
+	use("romgrk/barbar.nvim")
 
+	use("lukas-reineke/indent-blankline.nvim")
+
+	-- Functionality
 	use({
 		{
 			"nvim-telescope/telescope.nvim",
@@ -32,22 +32,24 @@ require("packer").startup(function(use)
 
 	use("kyazdani42/nvim-tree.lua")
 
-	use("lukas-reineke/indent-blankline.nvim")
-
 	use("terrortylor/nvim-comment")
-
-	use("glepnir/dashboard-nvim")
-
-	use("romgrk/barbar.nvim")
 
 	use("simrat39/symbols-outline.nvim")
 
-	use("JoosepAlviste/nvim-ts-context-commentstring")
+	use("akinsho/toggleterm.nvim")
 
+	-- Lsp, autocomplete and highlightig
 	use({
 		"neovim/nvim-lspconfig",
 		requires = { "hrsh7th/cmp-nvim-lsp" },
 	})
+
+	use({
+		"nvim-treesitter/nvim-treesitter",
+		run = ":TSUpdate",
+	})
+
+	use("JoosepAlviste/nvim-ts-context-commentstring")
 
 	use("hrsh7th/nvim-cmp")
 	use("hrsh7th/cmp-buffer")
@@ -71,3 +73,5 @@ require("markrikhter.plugins.symbols-outline")
 require("markrikhter.plugins.comment")
 require("markrikhter.plugins.cmp")
 require("markrikhter.plugins.null-ls")
+require("markrikhter.plugins.toggleterm")
+require("markrikhter.plugins.onedark")

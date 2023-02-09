@@ -3,9 +3,6 @@ local g = vim.g
 
 o.termguicolors = true
 
--- Установка темы base16-dracula как дефолтную
-vim.cmd[[colorscheme base16-gruvbox-dark-soft]]
-
 -- Кол-во строк над и под курсором
 o.scrolloff = 10
 
@@ -13,7 +10,7 @@ o.scrolloff = 10
 o.history = 100
 
 -- Символы, воспринимаемые в качестве парных
-o.matchpairs = '(:),{:},[:],<:>'
+o.matchpairs = "(:),{:},[:],<:>"
 
 -- Окно, на которое наведена мышка автоматически активируется
 o.mousefocus = true
@@ -62,16 +59,15 @@ o.writebackup = false
 o.undofile = true
 o.swapfile = false
 
--- Установка пробела в качестве <leader> 
-g.mapleader = ' '
-g.maplocalleader = ' '
+-- Установка пробела в качестве <leader>
+g.mapleader = " "
+g.maplocalleader = " "
 
-vim.opt.clipboard:append { 'unnamedplus' }
+vim.opt.clipboard:append({ "unnamedplus" })
 
 vim.diagnostic.config({
-  float = {
-    source = 'always',
+	float = {
+		source = "always",
 		focusable = false,
-  },
+	},
 })
-

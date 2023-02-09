@@ -4,8 +4,8 @@ local formatting = null_ls.builtins.formatting
 
 null_ls.setup({
 	sources = {
-		formatting.eslint_d,
 		formatting.prettierd,
+		-- formatting.eslint_d,
 		formatting.rustfmt,
 		formatting.stylua,
 	},
@@ -16,8 +16,7 @@ null_ls.setup({
 				group = augroup,
 				buffer = bufnr,
 				callback = function()
-					-- on 0.8, you should use vim.lsp.buf.format({ bufnr = bufnr }) instead
-					vim.lsp.buf.formatting_sync()
+					vim.lsp.buf.format({ bufnr = bufnr })
 				end,
 			})
 		end
