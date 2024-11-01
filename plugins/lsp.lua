@@ -1,101 +1,75 @@
-local utils = require("markrikhter.utilities")
-local status, lspconfig = pcall(require, "lspconfig")
-if not status then
-	return
-end
+return {
+  "neovim/nvim-lspconfig",
+  event = { "BufReadPre", "BufNewFile" },
+  dependencies = {
+    { "antosha417/nvim-lsp-file-operations", config = true },
+  },
+  config = function()
+    -- import lspconfig plugin
+    local lspconfig = require("lspconfig")
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
+    -- import mason_lspconfig plugin
+    local mason_lspconfig = require("mason-lspconfig")
 
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-utils.map("n", "<Leader>df", vim.diagnostic.open_float)
-utils.map("n", "<Leader>dk", vim.diagnostic.goto_prev)
-utils.map("n", "<Leader>dj", vim.diagnostic.goto_next)
+    local keymap = vim.keymap -- for conciseness
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-	-- Enable completion triggered by <c-x><c-o>
-	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+    vim.api.nvim_create_autocmd("LspAttach", {
+      group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+      callback = function(ev)
+        -- Buffer local mappings.
+        -- See `:help vim.lsp.*` for documentation on any of the below functions
+        local opts = { buffer = ev.buf, silent = true }
 
-	-- Formatting disabled for all lsp servers. Only null-ls will format files
-	client.server_capabilities.documentFormattingProvider = false
+        -- set keybinds
+        opts.desc = "lsp: Show references"
+        keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
 
-	-- Mappings.
-	-- See `:help vim.lsp.*` for documentation on any of the below functions
-	utils.map("n", "<Leader>de", vim.lsp.buf.definition)
-	utils.map("n", "<Leader>dh", vim.lsp.buf.hover)
-	utils.map("n", "<Leader>di", vim.lsp.buf.implementation)
-	utils.map("n", "<Leader>drn", vim.lsp.buf.rename)
-	utils.map("n", "<Leader>da", vim.lsp.buf.code_action)
-	utils.map("n", "<Leader>drf", vim.lsp.buf.references)
-end
+        opts.desc = "lsp: Go to declaration"
+        keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
 
-local lsp_flags = {
-	-- This is the default in Nvim 0.7+
-	debounce_text_changes = 150,
+        opts.desc = "Show LSP definitions"
+        keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
+
+        opts.desc = "Show LSP implementations"
+        keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
+
+        opts.desc = "Show LSP type definitions"
+        keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
+
+        opts.desc = "See available code actions"
+        keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
+
+        opts.desc = "Smart rename"
+        keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
+
+        opts.desc = "Show buffer diagnostics"
+        keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
+
+        opts.desc = "Show line diagnostics"
+        keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
+
+        opts.desc = "Go to previous diagnostic"
+        keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
+
+        opts.desc = "Go to next diagnostic"
+        keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
+
+        opts.desc = "Show documentation for what is under cursor"
+        keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
+
+        opts.desc = "Restart LSP"
+        keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+      end,
+    })
+
+    -- used to enable autocompletion (assign to every lsp server config)
+
+    mason_lspconfig.setup_handlers({
+      -- default handler for installed servers
+      function(server_name)
+        lspconfig[server_name].setup({
+        })
+      end,
+    })
+  end,
 }
-
--- Typescripts
-lspconfig.tsserver.setup({
-	on_attach = on_attach,
-	flags = lsp_flags,
-})
-
--- CSS
-lspconfig.cssls.setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	flags = lsp_flags,
-})
-lspconfig.cssmodules_ls.setup({
-	flags = lsp_flags,
-	on_attach = on_attach,
-})
-
--- HTML
-lspconfig.html.setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	flags = lsp_flags,
-})
-
--- Vue 3
-lspconfig.volar.setup({
-	on_attach = on_attach,
-	flags = lsp_flags,
-})
-
--- Rust
-lspconfig.rust_analyzer.setup({
-	on_attach = on_attach,
-	flags = lsp_flags,
-})
-
--- Python
-lspconfig.pylsp.setup({
-	on_attach = on_attach,
-	flags = lsp_flags,
-})
-
-lspconfig.sumneko_lua.setup({
-	on_attach = on_attach,
-	flags = lsp_flags,
-	settings = {
-		Lua = {
-			runtime = {
-				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-				version = "LuaJIT",
-			},
-			diagnostics = {
-				-- Get the language server to recognize the `vim` global
-				globals = { "vim" },
-			},
-			workspace = {
-				-- Make the server aware of Neovim runtime files
-				library = vim.api.nvim_get_runtime_file("", true),
-			},
-		},
-	},
-})

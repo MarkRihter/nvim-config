@@ -1,27 +1,29 @@
-require('lualine').setup({
-    options = {
-		icons_enabled = true,
-		globalstatus = true,
-        theme = 'base16',
-		always_divide_middle = false,
-		disabled_filetypes = {
-			'netrw',
-		},
-    },
-    sections = {
-        lualine_a = { 'mode' },
-        lualine_b = {
-            'branch',
-			'diagnostics'
-        },
-        lualine_c = {
-            { 'filename', file_status = true, path = 1 },
-        },
-        lualine_x = { 'diff', 'filetype' },
-        lualine_y = { 'progress' },
-        lualine_z = {
-            { 'location', color = { gui = 'bold' } },
-        },
-    },
-	extensions = { 'nvim-tree' },
-})
+return {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+        local lualine = require "lualine"
+
+        lualine.setup({
+            options = {
+                disabled_filetypes = { 'NvimTree' },
+                  sections = {
+                    lualine_a = {'mode'},
+                    lualine_b = {'branch', 'diagnostics'},
+                    lualine_c = {'filename'},
+                    lualine_x = {'filetype'},
+                    lualine_y = {},
+                    lualine_z = {'location'}
+                  },
+                  inactive_sections = {
+                    lualine_a = {},
+                    lualine_b = {},
+                    lualine_c = {'filename'},
+                    lualine_x = {'location'},
+                    lualine_y = {},
+                    lualine_z = {}
+                  },
+            }
+        })
+    end
+}
